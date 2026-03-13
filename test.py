@@ -6,15 +6,18 @@ if "show_countdown" not in st.session_state:
     st.session_state.show_countdown = False
 if "cooldown_end" not in st.session_state:
     st.session_state.cooldown_end = 0
+if "mail_sent_time" not in st.session_state:
+    st.session_state.mail_sent_time = 0
 
-# Create a placeholder for the button/countdown
+# Create placeholders
 button_placeholder = st.empty()
+message_placeholder = st.empty()
 
 if not st.session_state.show_countdown:
     # Render the button inside the placeholder
     if button_placeholder.button("Resend Code"):
-        st.success("✅ Code sent to your email!")
-        # Set cooldown for 30 seconds (easy to test)
+        # Simulate sending mail
+        st.session_state.mail_sent_time = time.time()
         st.session_state.cooldown_end = time.time() + 30
         st.session_state.show_countdown = True
         st.rerun()
@@ -40,8 +43,14 @@ if st.session_state.show_countdown:
             """,
             unsafe_allow_html=True
         )
+
+        # Show mail sent message only for 3 seconds
+        if time.time() - st.session_state.mail_sent_time < 3:
+            message_placeholder.success("📧 Code was sent to your email!")
+
         time.sleep(1)
         st.rerun()
     else:
         st.session_state.show_countdown = False
+        st.session_state.mail_sent_time = 0
         st.rerun()
