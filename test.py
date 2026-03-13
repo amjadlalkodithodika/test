@@ -23,20 +23,21 @@ if st.session_state.show_countdown:
     remaining = int(st.session_state.cooldown_end - time.time())
     if remaining > 0:
         mins, secs = divmod(remaining, 60)
-        # Replace the button with countdown text in the same spot
-        # Use markdown with CSS-like styling to match button width
+        # Replace the button with a centered countdown box
         button_placeholder.markdown(
             f"""
             <div style="
-                display:inline-block;
-                width:100%;
-                text-align:center;
-                padding:0.5em;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                padding:0.5em 1em;
                 border:1px solid #666;
                 border-radius:4px;
                 background-color:#222;
                 color:#FFD700;
-                font-weight:bold;">
+                font-weight:bold;
+                width:auto;
+                margin:auto;">
                 Next resend in: {mins:02d}:{secs:02d}
             </div>
             """,
