@@ -7,10 +7,12 @@ if "show_countdown" not in st.session_state:
 if "cooldown_end" not in st.session_state:
     st.session_state.cooldown_end = 0
 
-placeholder = st.empty()
+# Create a placeholder for the button/countdown
+button_placeholder = st.empty()
 
 if not st.session_state.show_countdown:
-    if st.button("Resend Code"):
+    # Render the button inside the placeholder
+    if button_placeholder.button("Resend Code"):
         st.success("✅ Code sent to your email!")
         # Set cooldown for 30 seconds (easy to test)
         st.session_state.cooldown_end = time.time() + 30
@@ -20,10 +22,9 @@ if not st.session_state.show_countdown:
 if st.session_state.show_countdown:
     remaining = int(st.session_state.cooldown_end - time.time())
     if remaining > 0:
-        # Render countdown in placeholder
         mins, secs = divmod(remaining, 60)
-        placeholder.info(f"Next resend in: {mins:02d}:{secs:02d}")
-        # Force rerun after 1 second
+        # Replace the button with countdown text in the same spot
+        button_placeholder.info(f"Next resend in: {mins:02d}:{secs:02d}")
         time.sleep(1)
         st.rerun()
     else:
